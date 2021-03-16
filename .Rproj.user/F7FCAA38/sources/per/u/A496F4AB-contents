@@ -1,0 +1,354 @@
+
+#### PMI ####
+
+xlsx_cells(file.path(dt_pth, "economic_damage", 
+                     "economic indicators_0121.xlsx"), "2") %>%
+    filter(is_blank == FALSE) %>%
+    behead("NNW", "indicator") %>%
+    behead("N", "area") %>%
+    behead("W", "time") %>%
+    mutate(time = as.Date(time)) %>%
+    filter(time > as.Date("2019-12-31")) %>%
+    mutate(dataset = "pmi", xwhich = 2, xvarchar = "", xvardt = time, 
+           yval = numeric, yvllb = "", text = "") %>% 
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+    dsh_insert_db()
+
+#### PMI New ####
+xlsx_cells(file.path(dt_pth, "economic_damage", 
+                     "economic indicators_0121.xlsx"), "3") %>%
+    filter(is_blank == FALSE) %>%
+    behead("NNW", "indicator") %>%
+    behead("N", "area") %>%
+    behead("W", "time") %>%
+    mutate(time = as.Date(time)) %>%
+    filter(time > as.Date("2019-12-31")) %>%
+    mutate(dataset = "pmi_new", xwhich = 2, xvarchar = "", xvardt = time, 
+           yval = numeric, yvllb = "", text = "") %>% 
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+    dsh_insert_db()
+
+# data.frame(dataset = "pmi_new", xwhich = 2, xvarchar = "", 
+#            xvardt = pmi_new$time, yval = pmi_new$val, yvllb = "", text = "", 
+#            stringsAsFactors = FALSE) %>% dsh_insert_db()
+
+#### Consumer confidence ####
+xlsx_cells(file.path(dt_pth, "economic_damage", 
+                     "economic indicators_0121.xlsx"), "4") %>%
+    filter(is_blank == FALSE) %>%
+    behead("NNW", "indicator") %>%
+    behead("N", "area") %>%
+    behead("W", "time") %>%
+    mutate(dataset = "cconf", xwhich = 2, xvarchar = "", 
+           xvardt = as.Date(time), yval = numeric, yvllb = "", text = "") %>% 
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+    dsh_insert_db()
+
+
+# data.frame(dataset = "cconf", xwhich = 2, xvarchar = "", xvardt = cconf$time, 
+#            yval = cconf$val, yvllb = "", text = "",  
+#            stringsAsFactors = FALSE) %>% dsh_insert_db()
+
+#### House prices ####
+xlsx_cells(file.path(dt_pth, "economic_damage", "economic indicators_0121.xlsx"), "5") %>%
+    filter(is_blank == FALSE) %>%
+    behead("NNW", "indicator") %>%
+    behead("NNW", "area") %>%
+    behead("N", "numtype") %>%
+    behead("W", "time") %>%
+    filter(numtype == "Annual growth") %>%
+    mutate(xvardt = as.Date(time)) %>%
+    mutate(text = format(xvardt, "%b %Y")) %>%
+    mutate(dataset = "hsprc", xwhich = 2, xvarchar = "", 
+           yval = numeric, yvllb = "") %>% 
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### House price expectations ####
+
+hsprcex <- read_excel(file.path(dt_pth, "economic_damage", "economic indicators_1120.xlsx"), "6", skip = 3) %>%
+    filter(!is.na(London)) %>%
+    mutate(mnth = as.Date(as.numeric(Month), origin = "1899-12-30")) %>%
+    mutate(timelab = format(mnth, "%b %Y")) %>%
+    filter(mnth > (max(mnth) - (365* 1.5)))
+
+
+data.frame(dataset = "hsprcex", xwhich = 2, xvarchar = "", xvardt = hsprcex$mnth, 
+           yval = hsprcex$London, yvllb = "", text = hsprcex$timelab,  
+           stringsAsFactors = FALSE) %>% dsh_insert_db()
+
+## chris' new file
+
+fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/labourmarket - Feb copy V1.xlsx"
+
+hdln_figs <- xlsx_cells(fl, "Headline estimates") %>%
+    filter(is_blank == FALSE, row > 10) %>%
+    behead("NNW", "indicator") %>%
+    behead("N", "area") %>%
+    behead("W", "period") %>%
+    separate(period, c("from", "to"), sep = "-" ) %>%
+    mutate(fromdt = paste0("1 ", trimws(from) )) %>%
+    mutate(todt = paste0("1 ", trimws(to) )) %>%
+    select(indicator, area, fromdt, todt, val = numeric) %>%
+    mutate(date = as.Date(todt, format = "%d %B %Y"))
+
+#### Employment ####
+hdln_figs %>% 
+    filter(indicator == "Employment Rate (16-64)")  %>%
+    mutate(dataset = "empl", xwhich = 2, xvarchar = "", xvardt = date, 
+           yval = val, yvllb = area, text = format(date, "%b %y")) %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+    dsh_insert_db()
+
+
+#### Unemployment ####
+hdln_figs %>% 
+    filter(indicator == "Unemployment Rate (16+)")  %>%
+    mutate(dataset = "unempl", xwhich = 2, xvarchar = "", xvardt = date, 
+           yval = val, yvllb = area, text = format(date, "%b %y")) %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+    dsh_insert_db()
+
+# unempl  %>%
+#     select(tm, London, UK) %>%
+#     pivot_longer(-tm) %>%
+#     mutate(dataset = "unempl", xwhich = 2, xvarchar = "", xvardt = tm, 
+#            yval = value, yvllb = name, text = format(tm, "%b %y")) %>%
+#     select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+#     dsh_insert_db()
+
+
+#### London Living Wage ####
+read_excel(file.path(dt_pth, "economic_damage", 
+                     "employees-earning-below-llw-ft-pt-sex.xlsx"), 
+           "London" ) %>%
+    clean_names() %>% filter(working_pattern == "Any working pattern") %>%
+    select(year, sex,
+           emps = number_of_employee_jobs_below_the_london_living_wage) %>%
+    filter(year > 2011, sex == "All employees") %>%
+    # pivot_wider(names_from = sex, values_from = emps) %>%
+    # clean_names() 
+    mutate(dataset = "llw", xwhich = 1, xvarchar = as.character(year),
+           xvardt = NA, yval = emps, yvllb = "", text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>%
+    dsh_insert_db()
+
+
+# data.frame(dataset = "llw", xwhich = 1, xvarchar = as.character(llw$year), 
+#            xvardt = NA, yval = llw$all_employees, yvllb = "All employees", 
+#            text = "",  stringsAsFactors = FALSE ) %>% dsh_insert_db()
+
+#### Insecure work ####
+xlsx_cells(file.path(dt_pth, "economic_damage", "insecure-employment.xlsx"), 2) %>%
+    behead("NNW", "yvllb") %>%
+    behead("NNW", "vrb") %>%
+    behead("N", "valtype") %>%
+    behead("W", "year") %>%
+    filter(vrb == "Percent employed in insecure employment",
+           valtype == "%",
+           year > 2011) %>%
+    mutate(dataset = "inswk", xwhich = 1, xvarchar = as.character(year),
+           xvardt = NA, yval = numeric, text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### Job postings ####
+
+read_excel(fl, "Job Postings Trend", skip = 6) %>%
+    select(Month = 1, ldn_chng = 3, uk_chng = 5) %>%
+    filter(!is.na(ldn_chng)) %>%
+    mutate(xvardt = as.Date(paste0("1 ", Month), format = "%d %b %Y"),
+           xvarchar = "", xwhich = 2, 
+           dataset = "pstngs", yval = ldn_chng, yvllb = "", text = "")  %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### International students ####
+xlsx_cells(file.path(dt_pth, "economic_damage", "economic indicators_0121.xlsx"), "8") %>%
+    behead("NNW", "variable") %>%
+    behead("N","year") %>%
+    filter(!is.na(numeric)) %>%
+    mutate(dataset = "intst", xwhich = 1, xvarchar = as.character(year),
+           xvardt = NA, yval = numeric, yvllb = "", text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### International visitors ####
+xlsx_cells(file.path(dt_pth, "economic_damage", "economic indicators_0121.xlsx"), "7") %>%
+    behead("NNW", "variable") %>%
+    behead("N","year") %>%
+    filter(!is.na(numeric), year > 2011) %>%
+    mutate(dataset = "intvst", xwhich = 1, xvarchar = as.character(year),
+           xvardt = NA, yval = numeric, yvllb = "", text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+#### BICS ####
+excel_sheets(file.path(dt_pth, "economic_damage", "Business site closures time series.xlsx"))
+
+ts <- xlsx_cells(file.path(dt_pth, 
+                           "economic_damage", 
+                           "Business site closures time series.xlsx"), "Time series")
+
+ts %>%
+    filter(row > 5) %>%
+    behead("N", "wave") %>%
+    behead("N", "daterng") %>%
+    behead("W", "industry") %>%
+    tidyr::separate(daterng, sep = "-", into = c("stdt", "endt")) %>%
+    filter(!is.na(numeric), 
+           industry == "All Industries") %>%
+    mutate(dt = as.Date(endt, format = "%d/%m/%y")) %>%
+    select(wave, stdt, endt, dt, industry, numeric) %>%
+    mutate(dataset = "bics", xwhich = 2, xvarchar = "",
+           xvardt = dt, yval = numeric, yvllb = "", text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+
+
+#### Furlough (ts) ####
+
+dir(file.path(dt_pth, "economic_damage", "furlough"))
+
+xlsx_cells(file.path(
+    dt_pth, 
+    "economic_damage", 
+    "furlough", "CJRS_2020_11.xlsx"), "4. Time series by region") %>%
+    filter(row > 4 ) %>%
+    behead("N", "area") %>%
+    behead("W", "blank") %>%
+    behead("W", "dt") %>%
+    filter(area == "London", !is.na(numeric)) %>%
+    select(area, dt, numeric ) %>%
+    mutate(dataset = "frl", xwhich = 2, xvarchar = "",
+           xvardt = as.Date(dt), yval = numeric, yvllb = "", text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### SEISS #### 
+
+
+#### Mastercard ####
+
+mcd <- fread(file.path(dt_pth, "economic_damage", "mastercard.csv"))
+
+mcdboth <- mcd %>%
+    mutate(date = as.Date(week_start, format = "%d/%m/%Y")) %>%
+    group_by(date) %>%
+    summarise(
+        Eating_mcwdy = sum(txn_amt_wd_eating), 
+        Eating_mcwkd = sum(txn_amt_we_eating),
+        Apparel_mcwdy = sum(txn_amt_wd_apparel), 
+        Apparel_mcwkd = sum(txn_amt_we_apparel),
+        Retail_mcwdy = sum(txn_amt_wd_retail), 
+        Retail_mcwkd = sum(txn_amt_we_retail)
+    ) %>% ungroup() %>%
+    pivot_longer(-date) %>%
+    separate(name, sep = "_", into = c("yvllb", "dataset")) %>%
+    mutate(xwhich = 2, xvarchar = "",
+           xvardt = as.Date(date), yval = value, text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) 
+
+mcdboth %>%
+    filter(dataset == "mcwdy") %>% 
+    dsh_insert_db()
+
+mcdboth %>%
+    filter(dataset == "mcwkd") %>% 
+    dsh_insert_db()
+
+
+
+#### TfL ####
+
+tfl <- readRDS("../londonCV19dash2/data/updated/latest/tfl.rds")
+
+tfl %>%     
+    mutate(dataset = "tfl", xwhich = 2, xvarchar = "", xvardt = as.Date(date), 
+           yval = journey_taps, yvllb = travel_mode,  text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+
+#### Heathrow traffic ####
+
+read_excel(file.path(dt_pth, 
+                     "economic_damage", 
+                     "Heathrow Traffic indicator spreadsheet.xlsx"),
+           "Indexes & graphs") %>%
+    mutate(Month = as.Date(Month )) %>%
+    select(Month, Passengers = 5, `Air transport movements` = 6, 
+           Cargo = 7) %>%
+    filter(Cargo > -1) %>%
+    pivot_longer(-Month) %>%
+    mutate(dataset = "htrw", xwhich = 2, xvarchar = "", xvardt = Month,  
+           yval = value,  yvllb = name,  text = "") %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### adult education ####
+
+xlsx_cells(
+    file.path(dt_pth, "economic_damage", 
+              "GLA AEB 2019-2020 August - April R10 Data Tables London.xlsx"
+    ), "2.2 LAD, Volumes") %>%
+    behead("NNW", "table") %>%
+    behead("NNW", "section") %>%
+    behead("N", "vrb") %>%
+    behead("W", "LAD11NM") %>%
+    filter(LAD11NM != "Total", vrb == "Learner Participation") %>% 
+    mutate(dataset = "ae", xwhich = 1, xvarchar = LAD11NM, xvardt = NA,  
+           yval = numeric,  yvllb = "",  
+           text = str_pad(numeric, width = 12, side = "left", pad = "0")) %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### AE - Maths/English ####
+
+xlsx_cells(
+    file.path(dt_pth, "economic_damage", 
+              "GLA AEB 2019-2020 August - April R10 Data Tables London.xlsx"
+    ), "4.8 Eng and Maths Ent, Ach") %>%
+    behead("NNW", "table") %>%
+    behead("NNW", "section") %>%
+    behead("N", "vrb") %>%
+    behead("WNW", "subject") %>%
+    behead("W", "level") %>%
+    filter(level %in% c("Level 1", "Level 2"), 
+           vrb == "Achieved" ) %>%
+    mutate(dataset = "aeme", xwhich = 1, xvarchar = level, xvardt = NA,  
+           yval = numeric,  yvllb = subject,  
+           text = as.character(level)) %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+
+
+#### AE - low wage ####
+
+xlsx_cells(
+    file.path(dt_pth, "economic_damage", 
+              "GLA AEB 2019-2020 August - April R10 Data Tables London.xlsx"
+    ), "4.3 Low Wage by Level, Volumes") %>%
+    behead("NNW", "table") %>%
+    behead("NNW", "variable") %>%
+    behead("N", "category") %>%
+    behead("WNW", "wage_category") %>%
+    behead("W", "level") %>%
+    filter(category == "Learner Participation", level == "Total") %>%
+    mutate(dataset = "aelw", xwhich = 1, xvarchar = wage_category, 
+           xvardt = NA,  yval = numeric,  yvllb = "",  
+           text = as.character(row_number())) %>%
+    select(dataset, xwhich, xvarchar, xvardt, yval, yvllb, text) %>% 
+    dsh_insert_db()
+# select(category, wage_category, level, numeric) %>%
+# mutate(rn = row_number())

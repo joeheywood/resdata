@@ -1,0 +1,27 @@
+{
+    "id": "6DA474A5",
+    "path": "~/resdata/R/refresh_metadata.R",
+    "project_path": "R/refresh_metadata.R",
+    "type": "r_source",
+    "hash": "3292109888",
+    "contents": "",
+    "dirty": false,
+    "created": 1613378694610.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Sourceij461v73ffeg",
+        "cursorPosition": "0,0",
+        "scrollLine": "0",
+        "marks": "<:0,0\n>:23,-1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1613383268,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1613383268295,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,6 @@
+"0","# Run but keep eval=FALSE to avoid infinite loop"
+"0","# Execute in the console directly"
+"0","fusen::inflate(rmd = ""dev/dev_history.Rmd"")"
+"2","Error in fusen::inflate(rmd = ""dev/dev_history.Rmd"") : 
+  C:\Users\joheywood\Documents\resdata\dev\dev\dev_history.Rmd does not exists, please use fusen::add_dev_history() to create it.
+"

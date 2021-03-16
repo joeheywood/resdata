@@ -1,0 +1,20 @@
+Package: resdata
+Version: 0.0.0.9000
+Title: Manage database for GLA project
+Description: Create, populate and maintain a sqlite database containing all the data you need to populate a dashboard, run by the autodash package
+Authors@R: c(person(given = "Joe",
+         family = "Heywood",
+         role = c("aut", "cre"),
+         email = "joe.heywood@london.gov.uk",
+         comment = c(ORCID = "0000-0002-1565-9313")),
+  person(given = "GLA",
+         role = "cph"))
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

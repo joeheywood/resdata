@@ -1,0 +1,28 @@
+{
+    "id": "CF46B91A",
+    "path": "~/resdata/R/insert_boro_db.R",
+    "project_path": "R/insert_boro_db.R",
+    "type": "r_source",
+    "hash": "3508198093",
+    "contents": "",
+    "dirty": false,
+    "created": 1613381440661.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "tempName": "Untitled3",
+        "source_window_id": "",
+        "Source": "Sourceij461v73ffeg",
+        "cursorPosition": "29,61",
+        "scrollLine": "0",
+        "marks": "<:29,39\n>:30,4"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1615830617,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1615830617494,
+    "read_only": false,
+    "read_only_alternatives": []
+}

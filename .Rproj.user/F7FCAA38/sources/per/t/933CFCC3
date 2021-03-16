@@ -1,0 +1,27 @@
+{
+    "id": "933CFCC3",
+    "path": "~/resdata/R/insert_db.R",
+    "project_path": "R/insert_db.R",
+    "type": "r_source",
+    "hash": "3319109122",
+    "contents": "",
+    "dirty": false,
+    "created": 1614009058666.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Sourceij461v73ffeg",
+        "cursorPosition": "63,0",
+        "scrollLine": "0",
+        "marks": "<:63,0\n>:64,27"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1614345472,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1614345472150,
+    "read_only": false,
+    "read_only_alternatives": []
+}

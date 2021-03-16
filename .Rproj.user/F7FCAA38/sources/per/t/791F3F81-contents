@@ -1,0 +1,16 @@
+AUTH0_USER=dev-h031q337
+AUTH0_KEY=oLLrKcpr1Z0Ld4zJ3LVMhLv5FlNb0UIc
+AUTH0_SECRET=T12Gz0iGFGYVvc3dFaHzMfJE9yIXnoSx1DK8ImhFVNQrrl085cvm6bMulEajCkwO
+
+
+RETICULATE_PYTHON="C:\Program Files\Python\Python38"
+
+
+GITHUB_PAT=98a7d06c1c8c34a14fb196cbbaf65c11c205b55e
+
+JAVA_HOME="C:\Program Files\Java\jre7"
+
+lds_api_key="6f810cab-1b6d-482b-aa1a-dc05d0f215cd"
+
+DASH_DATAPATH="C:/Users/joheywood/Documents/indicators_dash/indicators.sqlite"
+DASH_METAPATH="C:/Users/joheywood/Greater London Authority/DPA - Data monitoring/Recovery Data for Dashboard.xlsx"
