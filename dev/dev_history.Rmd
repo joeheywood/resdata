@@ -1,0 +1,110 @@
+---
+title: "dev_history.Rmd for working package"
+author: "Sébastien Rochette"
+date: "23/01/2021"
+output: html_document
+---
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+<!--
+# Description of your package
+
+This will fill the description of your package.
+Add this chunk using `fusen::description_chunk()`
+--> 
+
+```{r description}
+# Describe your package
+fusen::fill_description(
+  fields = list(
+    Title = "Manage database for GLA project",
+    Description = "Create, populate and maintain a sqlite database containing all the data you need to populate a dashboard, run by the autodash package",
+    `Authors@R` = c(
+      person("Joe", "Heywood", email = "joe.heywood@london.gov.uk", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-1565-9313")),
+      person(given = "GLA", role = "cph")
+    )
+  ), overwrite = TRUE
+)
+# Define License with use_*_license()
+usethis::use_mit_license("Joe Heywood")
+```
+
+# Calculate the median of a vector
+
+```{r function}
+#' Refresh the metadata 
+#'
+#'
+#' @return
+#' Logical - TRUE for worked ok
+#' @export
+#'
+#' @examples
+refresh_metadata <- function() {
+  TRUE
+}
+```
+
+```{r examples}
+# my_median(1:12)
+refresh_metadata()
+```
+
+```{r tests}
+test_that("refreshing metadata works", {
+})
+```
+
+# Calculate the mean of a vector
+## Use sub-functions in the same chunk
+
+```{r function-1}
+#' Add data to database
+#'
+#' @param dat A data.frame with correct columns and at least one row
+#'
+#' @return
+#' Logical - TRUE for worked ok.
+#' @export
+#'
+#' @examples
+insert_db <- function(x, na.rm = TRUE) {
+  TRUE
+}
+
+```
+
+```{r examples-1}
+dat <- data.frame()
+insert_db(dat)
+```
+
+```{r tests-1}
+test_that("insert_db works properly and show error if needed", {
+})
+```
+
+# There can be development actions
+
+These will be included in the `dev_history.R` file of your package, but won't be direct part of it.
+
+```{r development-1, eval=FALSE}
+# Run but keep eval=FALSE to avoid infinite loop
+# Execute in the console directly
+fusen::inflate(rmd = "dev/dev_history.Rmd")
+```
+
+
+# Inflate your package
+
+You're one inflate from paper to box.
+Build your package from this very Rmarkdown using `fusen::inflate()`
+
+- Verify your `"DESCRIPTION"` file has been updated
+- Verify your function is in `"R/"` directory
+- Verify your test is in `"tests/testthat/"` directory
+- Verify this Rmd appears in `"vignettes/"` directory
+
