@@ -4,40 +4,35 @@
 #'
 #'
 #' @return
-#' DOES THE FUNCTION RETURN ANYTHING?
+#' TRUE if it works
 #' @export
 #'
 #' @examples
 #' EXAMPLE OF USAGE
+#' import RPostgres
 #' import RSQLite
 #' import DBI
 #' import xlsx
+#' import yaml
 #' 
 create_schema <- function (tables = c("mtd", "ind_dat", "ind_boro_dat")){
-    conSuper <- dbConnect( dbDriver("Postgres"),
-                           dbname = Sys.getenv("dbname"),
-                           host = Sys.getenv("host"),
-                           port = Sys.getenv("port"),
-                           password = Sys.getenv("password"),
-                           user = Sys.getenv("user")
-    )
+    # cnfg <- yaml::yaml.load_file("M:/rconfig.yaml")
+    conSuper <- rdb_connect()
     
     for(i in 1:length(tables)) {
-        file <- read.xlsx(
-            Sys.getenv("schema_path"),
-            sheetName = tables[[i]]
-        )
+        file <- read.xlsx( cnfg$schema_path, sheetName = tables[[i]] )
         
         assign( tables[[i]], file )
         print(tables[[i]])
         
         schema <- paste0(apply(file, 1, paste0, collapse = " "), collapse = ",")
         
-        dbGetQuery(conSuper, paste0("DROP TABLE IF EXISTS ", tables[[i]]))
-        dbGetQuery(conSuper, paste0("CREATE TABLE ",tables[[i]],"(", schema,")"))
+        dbSendQuery(conSuper, paste0("DROP TABLE IF EXISTS ", tables[[i]]))
+        dbSendQuery(conSuper, paste0("CREATE TABLE ",tables[[i]],"(", schema,")"))
         
         # load existing database
         file <- read.csv(paste0("E:/project_folders/apps/db/tables/",tables[[i]], ".csv"))
+        file <- data.table::fread(paste0("E:/project_folders/apps/db/tables/",tables[[i]], ".csv")) 
         assign( tables[[i]], file )
         
         # convert INT to DATE type. recommend to unify notation for date columns
@@ -49,6 +44,11 @@ create_schema <- function (tables = c("mtd", "ind_dat", "ind_boro_dat")){
         if("x" %in% colnames(file))
         {
             file$x <- as.Date(file$x, origin="1970-01-01")
+        }
+        
+        ## if it's the metadata file, then remove NAs
+        if("dataset" %in% colnames(file)) {
+            file <- file %>% filter(!is.na(dataset))
         }
         
         #Prepare query

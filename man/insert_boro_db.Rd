@@ -4,10 +4,12 @@
 \alias{insert_boro_db}
 \title{Add borough-level data to database}
 \usage{
-insert_boro_db(dat)
+insert_boro_db(dat, log = "")
 }
 \arguments{
 \item{dat}{A data.frame with correct columns for the boro table and at least one row}
+
+\item{log}{Location of log file. Default is print to console}
 }
 \value{
 Logical - TRUE for worked ok.

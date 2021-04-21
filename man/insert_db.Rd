@@ -4,10 +4,12 @@
 \alias{insert_db}
 \title{Add data to database}
 \usage{
-insert_db(dat)
+insert_db(dat, log = "")
 }
 \arguments{
 \item{dat}{A data.frame with correct columns and at least one row}
+
+\item{log}{Location of log file. Default is print to console}
 }
 \value{
 Logical - TRUE for worked ok.

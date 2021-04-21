@@ -28,14 +28,15 @@ insert_db <- function(dat, log = "") {
     cat(glue("\n\n############ ADDING {dtst} ####################\n\n"), 
         file = log, append = TRUE)
     if(dat$xwhich[1] == 2) {
-        dat$xvardt <- as.Date(dat$xvardt)
+        dat$xvardt <- as.Date(dat$xvardt, origin = "1970-1-1")
         mindt <- format(min(dat$xvardt), "%d %b '%y")
         maxdt <- format(max(dat$xvardt), "%d %b '%y")
         xmsg <- glue("Xaxis Date. Range:{mindt} - {maxdt}\n\n")
     } else {
         xmsg <- glue("Xaxis Character: {toString(unique(dat$xvarchar))}\n\n")
     }
-    conn <- dbConnect(SQLite(), dpth)
+    # conn <- dbConnect(SQLite(), dpth)
+    conn <- rdb_connect()
     m <- tbl(conn, "mtd") %>% 
         filter(dataset == dtst) %>% 
         collect()

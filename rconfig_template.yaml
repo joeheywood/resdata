@@ -1,0 +1,7 @@
+dbname: dpadb
+host: localhost 
+port: 5432
+password: forest79
+user: joheywood
+db_files_location: "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/indicators_data/db/updates"
+schema_path: "E:/project_folders/apps/db/schema/DBSchema.xlsx"
