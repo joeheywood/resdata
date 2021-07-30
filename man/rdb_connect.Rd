@@ -14,4 +14,5 @@ Get database connection
 }
 \examples{
 conn <- rdb_connect()
+
 }

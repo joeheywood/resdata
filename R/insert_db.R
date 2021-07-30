@@ -7,11 +7,14 @@
 #' @return
 #' Logical - TRUE for worked ok.
 #' @export
+#' 
+#' @import here
 #'
 #' @examples
 #' dat <- data.frame()
 #' insert_db(dat)
-insert_db <- function(dat, log = "") {
+insert_db <- function(dat, log = "", excfl = "") {
+    save(dat, log, excfl, file = "debug.Rda")
     dpth <- Sys.getenv("DASH_DATAPATH")
     # tmstmp <- format(Sys.time(), "%Y-%m-%dT%H%M")
     # logfl <- file.path(dirname(dpth, glue("update_")))
@@ -51,11 +54,33 @@ insert_db <- function(dat, log = "") {
     cat(xmsg, file = log, append = TRUE)
     
     if("ind_dat" %in% dbListTables(conn)) {
+        lmx <- ""
+        last_max <- NA
+        new_vals <- FALSE
+        prev <- tbl(conn, "ind_dat") %>% 
+            filter(dataset == dtst) %>% 
+            collect()
+        # print(tail(prev))
+        if(nrow(prev) > 0) {
+            if(prev$xwhich[1] == 2) {
+                last_max <- as.Date(max(prev$xvardt), origin = "1970-1-1")
+                new_vals <- max(dat$xvardt) > last_max
+                last_max <- as.character(last_max)
+            } else {
+                last_max <- max(prev$xvarchar)
+                new_vals <- max(dat$xvarchar) > last_max
+            }
+            
+            lmx <- glue("Last max: {last_max}\n\n")
+        } else {
+            lmx <- "Last max: N/A"
+        }
         gsql <- glue_sql("DELETE FROM ind_dat WHERE dataset = {dtst}", 
                          .con = conn)
         qry <- dbSendQuery(conn = conn, gsql)
         rws <- dbGetRowsAffected(qry)
         cat(glue("Number of rows deleted: {rws}\n\n"), file = log, append = TRUE)
+        cat(lmx, file = log, append = TRUE)
         dbClearResult(qry)
         dbAppendTable(conn, "ind_dat", dat)
         cat(glue("Number of rows added: {nrow(dat)}\n\n"), 
@@ -64,6 +89,17 @@ insert_db <- function(dat, log = "") {
         dbWriteTable(conn, "ind_dat", dat)
         print(glue("Number of rows added: {nrow(dat)}\n\n"), file = log, 
               append = TRUE)
+    }
+    upds <- data.frame(dataset = dat$dataset[1], 
+                       lastmax = last_max,
+                       newvals = new_vals,
+                       timestamp = Sys.time(),
+                       execfile = excfl)
+    if("updates" %in% dbListTables(conn)) {
+        dbAppendTable(conn, "updates", upds)
+    } else {
+        dbWriteTable(conn, "updates", upds)
+        
     }
     # dbCommit(conn)
     dbDisconnect(conn) 

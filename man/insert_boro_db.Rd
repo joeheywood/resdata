@@ -4,7 +4,7 @@
 \alias{insert_boro_db}
 \title{Add borough-level data to database}
 \usage{
-insert_boro_db(dat, log = "")
+insert_boro_db(dat, log = "", excfl = "")
 }
 \arguments{
 \item{dat}{A data.frame with correct columns for the boro table and at least one row}

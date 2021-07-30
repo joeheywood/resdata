@@ -5,3 +5,4 @@ password: forest79
 user: joheywood
 db_files_location: "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/indicators_data/db/updates"
 schema_path: "E:/project_folders/apps/db/schema/DBSchema.xlsx"
+flpth: "Path/To/Recovery Data for Dashboard.xlsx"

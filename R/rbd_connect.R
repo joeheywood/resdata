@@ -4,14 +4,17 @@
 #'
 #' @return #' A DBI dataconnect object
 #' @export
+#' @import here
+#' @import RPostgres
 #'
 #' @examples
 #' conn <- rdb_connect()
+#' 
 
 rdb_connect <- function() {
-    configdir <- Sys.getenv("RDCONFIG")
-    cnfg <- yaml::yaml.load_file(file.path(configdir, "rconfig.yaml"))
-    conSuper <- dbConnect( DBI::dbDriver("Postgres"),
+    # configdir <- Sys.getenv("RDCONFIG")
+    cnfg <- yaml::yaml.load_file(here("rconfig.yml"))
+    conSuper <- dbConnect( RPostgres::Postgres(),
                            dbname = cnfg$dbname,
                            host = cnfg$host,
                            port = cnfg$port,

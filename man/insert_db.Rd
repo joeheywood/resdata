@@ -4,7 +4,7 @@
 \alias{insert_db}
 \title{Add data to database}
 \usage{
-insert_db(dat, log = "")
+insert_db(dat, log = "", excfl = "")
 }
 \arguments{
 \item{dat}{A data.frame with correct columns and at least one row}

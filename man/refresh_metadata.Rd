@@ -13,6 +13,5 @@ Logical - TRUE for worked ok
 Refresh the metadata
 }
 \examples{
-# my_median(1:12)
 refresh_metadata()
 }
