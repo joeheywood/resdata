@@ -110,7 +110,7 @@ insert_communities_other <- function(log = "") {
                         "db/updates/homelessness_relief.csv")) %>%
             as.data.frame() %>%
             insert_db()
-    }, error = errfun)
+    }, error = function(e){error_log(e, "Communities - other")})
     
     
     tryCatch({

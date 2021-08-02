@@ -12,6 +12,7 @@
 #' @import readxl
 #' @import tidyxl
 #' @import unpivotr
+#' @import lubridate
 #'
 #' @examples
 #' run_updates()
@@ -24,6 +25,8 @@
 insert_subregional <- function(log = "") {
     
     dt_pth <- "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/data"
+    dt_pth <- "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/data"
+    fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/Covid-19 Recovery Dashboard - labour market.xlsx"
     
     
     #### People on UC ####
@@ -72,7 +75,8 @@ insert_subregional <- function(log = "") {
     }, error = function(e){error_log(e, "Subregional")})
     
     tryCatch({
-        clmts <- fread("Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/indicators_data/db/updates/claimant_count.csv")
+        clmts <- fread("Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/indicators_data/db/updates/claimant_count.csv") %>%
+            as.data.frame()
         
         clmts %>% 
             filter(LAD11NM != "City of London") %>%

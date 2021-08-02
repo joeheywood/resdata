@@ -139,7 +139,7 @@ insert_cg_other = function(log = "") {
                    vrb == "Total household waste") %>%
             ## calculate change since first value ##
             group_by(yvllb) %>%
-            mutate(yval = numeric / first(numeric)) %>%  ungroup() %>%
+            mutate(yval = numeric / dplyr::first(numeric)) %>%  ungroup() %>%
             mutate(dataset = "wst", xvardt = NA, xwhich = 1, text = "") %>%
             insert_db(log)
     }, error = function(e){error_log(e, "CG - other")})
