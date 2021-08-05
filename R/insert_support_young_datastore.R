@@ -21,6 +21,7 @@ insert_support_young_datastore <- function(log = "") {
     tryCatch({
         fread(file.path(dt_pth, "gcse-results-by-borough",
                         "gcse-results.csv")) %>%
+            as.data.frame() %>%
             filter(Code %in% c("E92000001", "E12000007"), 
                    Year > "2014/15", 
                    Sex == "All") %>%

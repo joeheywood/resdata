@@ -61,7 +61,7 @@ insert_support_young_am <- function(log = "") {
     ## This should eventually be  on datastore
     tryCatch({
         read_excel(am_fl, "overcrowding") %>%
-            mutate(dataset = "chovrcrwd", xwhich = 2, xvarchar = Year, 
+            mutate(dataset = "chovrcrwd", xwhich = 1, xvarchar = Year, 
                    yval = `All tenures`, yvllb = Area, xvardt = NA, text = "") %>%
             insert_db()
     }, error = function(e){error_log(e, "Support Young - AM file")})

@@ -24,8 +24,8 @@ insert_econ_macro <- function(log = "") {
     xfl <- "insert_econ_macro"
     
     ## File that mike hope updates
-    mh_fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/Previous versions/Covid-19 Recovery Dashboard - Macroeconomic indicators_20210616.xlsx"
-    # mh_fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/Covid-19 Recovery Dashboard - Macroeconomic indicators.xlsx"
+    # mh_fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/Previous versions/Covid-19 Recovery Dashboard - Macroeconomic indicators_20210616.xlsx"
+    mh_fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/Covid-19 Recovery Dashboard - Macroeconomic indicators.xlsx"
     # mh_fl <- "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/indicators_data/db/sub_updates/Covid-19 Recovery Dashboard - Macroeconomic indicators.xlsx"
     
     
