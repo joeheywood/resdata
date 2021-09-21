@@ -68,7 +68,8 @@ insert_econ_labmarket <- function(log = "") {
             select(xvarchar = 1, yval = 3) %>%
             filter(!is.na(yval)) %>%
             mutate(dataset = "seiss", xwhich = 1,xvardt = NA,
-                   yvllb = "", text = as.character(yval*-1)) %>%
+                   yvllb = ifelse(xvarchar %in% c("London", "United Kingdom"), "purple", "blue"), 
+                   text = as.character(yval*-1)) %>%
             insert_db(log)
     }, error = function(e){error_log(e, "Economy - Labour market")})
     

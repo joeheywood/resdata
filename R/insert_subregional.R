@@ -25,7 +25,6 @@
 insert_subregional <- function(log = "") {
     
     dt_pth <- "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/data"
-    dt_pth <- "Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/data"
     fl <- "Q:/Teams/Intelligence Unit - General/Recovery Dashboard/Covid-19 Recovery Dashboard - labour market.xlsx"
     
     

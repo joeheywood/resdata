@@ -8,6 +8,7 @@
 #' 
 #' @import purrr
 #' @import dplyr
+#' @import tidyr
 #' @import glue
 #' @import tidyxl
 #' @import unpivotr
@@ -81,22 +82,37 @@ insert_econ_other <- function(log = "") {
     
     
     
-    #### BICS #### This is going to be replaced soon.
+    #### BICS #### 
     tryCatch({
-        xlsx_cells(
-            file.path("Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/data/economic_damage",  
-                      "Business site closures time series.xlsx"), "Time series") %>% 
-            filter(row > 5) %>%
-            behead("N", "wave") %>%
-            behead("N", "daterng") %>%
-            behead("W", "industry") %>%
-            separate(daterng, sep = "-", into = c("stdt", "endt")) %>%
-            mutate(xvardt = as.Date(endt, format = "%d/%m/%y")) %>%
-            filter(!is.na(numeric), 
-                   industry == "All Industries") %>%
-            mutate(dataset = "bics", xwhich = 2, xvarchar = "",
-                   yval = numeric, yvllb = "", text = "") %>%
+        spfl <- file.path("C:/Users/joheywood/Greater London Authority", 
+                          "/S&_IU_ GLA Economics - Resilience Dashboard",
+                          "Business Trading.xlsx")
+        dates <- read_excel(spfl, 2) %>%
+            separate(`Reference period`, into = c("from", "to"), " to ") %>%
+            mutate(xvardt = as.Date(to, format = "%d %B %Y")) %>%
+            select(Wave, xvardt)
+        read_excel(spfl, 1, skip = 4) %>%
+            select(nuts1 = `NUTS 1`, Wave, Sector,
+                   yval = `Paused trading and does not intend to restart in the next two weeks`) %>%
+            filter(nuts1 %in% "London", Sector == "All industries") %>%
+            left_join(dates) %>%
+            mutate(dataset = "bics", xwhich = 2, xvarchar = "", yvllb = "", text = "") %>%
             insert_db()
+        
+        # xlsx_cells(
+        #     file.path("Q:/Teams/D&PA/Apps/COVID19 Recovery Dashboard/data/economic_damage",  
+        #               "Business site closures time series.xlsx"), "Time series") %>% 
+        #     filter(row > 5) %>%
+        #     behead("N", "wave") %>%
+        #     behead("N", "daterng") %>%
+        #     behead("W", "industry") %>%
+        #     separate(daterng, sep = "-", into = c("stdt", "endt")) %>%
+        #     mutate(xvardt = as.Date(endt, format = "%d/%m/%y")) %>%
+        #     filter(!is.na(numeric), 
+        #            industry == "All Industries") %>%
+        #     mutate(dataset = "bics", xwhich = 2, xvarchar = "",
+        #            yval = numeric, yvllb = "", text = "") %>%
+        #     insert_db()
         
     }, error = function(e){error_log(e, "Economy - other")})
     

@@ -82,6 +82,9 @@ insert_communities_other <- function(log = "") {
     
     #### GP Appointments ####
     tryCatch({
+        gpfl <- file.path("Q:/Teams/D&PA/Demography/david_kingman_files/", 
+                          "COVID_19_analysis/data/",
+                          "gp_london_gp_appointments_by_mode.csv")
         fread(file.path(dt_pth, "support_communities",
                         "gp_london_gp_appointments_by_mode.csv")) %>%
             as.data.frame() %>%
